@@ -54,4 +54,18 @@ public class ProductController {
         productService.addFolder(productId, folderId, userDetails.getUser());
     }
 
+    @GetMapping("/folders/{folderId}/products")
+    public Page<ProductResponseDto> getProductsInFolder(
+            @PathVariable Long folderId,
+            @RequestParam("page") int page, // 사용자의 페이지는 1부터 시작이지만, 서버에서는 0부터 시작으로 -1 해서 전달
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return productService.getProductsInFolder(
+                folderId, page-1, size, sortBy, isAsc, userDetails.getUser()
+        );
+    }
+
 }
